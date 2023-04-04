@@ -42,7 +42,7 @@ class DataGenerator:
         self.device = (
             torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
             if device is None else device)
-        self.dataset = Matterport3dDataset('./mp_data/bldg_infer.pkl')
+        self.dataset = Matterport3dDataset('./mp_data/bldg_infer_new.pkl')
         labels, pl_labels = create_label_lists(self.dataset)
         self.building_list, self.room_list, self.object_list = labels
         self.building_list_pl, self.room_list_pl, self.object_list_pl = pl_labels

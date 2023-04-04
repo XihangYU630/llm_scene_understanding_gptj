@@ -292,37 +292,36 @@ class DataGenerator:
                     room_embedding = self.embedder(room_str)
                     
 
-                    if split != 'train':
-                        # Save query embeddings
-                        if os.path.isfile(os.path.join(data_folder, split, "query_embeddings_" + suffix + ".pt")):
-                            query_embeddings = torch.load(os.path.join(data_folder, split, "query_embeddings_" + suffix + ".pt"))
-                            query_embeddings = torch.vstack((query_embeddings,query_embedding))
-                            torch.save(
-                                query_embeddings,
-                                os.path.join(data_folder, split,
-                                            "query_embeddings_" + suffix + ".pt"),
-                            )
-                        else:
-                            torch.save(
-                                query_embedding,
-                                os.path.join(data_folder, split,
-                                            "query_embeddings_" + suffix + ".pt"),
-                            )
-                        # Save room embeddings
-                        if os.path.isfile(os.path.join(data_folder, split, "room_embeddings_" + suffix + ".pt")):
-                            room_embeddings = torch.load(os.path.join(data_folder, split, "room_embeddings_" + suffix + ".pt"))
-                            room_embeddings = torch.vstack((query_embeddings,room_embedding))
-                            torch.save(
-                                room_embeddings,
-                                os.path.join(data_folder, split,
-                                            "room_embeddings_" + suffix + ".pt"),
-                            )
-                        else:
-                            torch.save(
-                                room_embedding,
-                                os.path.join(data_folder, split,
-                                            "room_embeddings_" + suffix + ".pt"),
-                            )
+                    # Save query embeddings
+                    if os.path.isfile(os.path.join(data_folder, split, "query_embeddings_" + suffix + ".pt")):
+                        query_embeddings = torch.load(os.path.join(data_folder, split, "query_embeddings_" + suffix + ".pt"))
+                        query_embeddings = torch.vstack((query_embeddings,query_embedding))
+                        torch.save(
+                            query_embeddings,
+                            os.path.join(data_folder, split,
+                                        "query_embeddings_" + suffix + ".pt"),
+                        )
+                    else:
+                        torch.save(
+                            query_embedding,
+                            os.path.join(data_folder, split,
+                                        "query_embeddings_" + suffix + ".pt"),
+                        )
+                    # Save room embeddings
+                    if os.path.isfile(os.path.join(data_folder, split, "room_embeddings_" + suffix + ".pt")):
+                        room_embeddings = torch.load(os.path.join(data_folder, split, "room_embeddings_" + suffix + ".pt"))
+                        room_embeddings = torch.vstack((room_embeddings,room_embedding))
+                        torch.save(
+                            room_embeddings,
+                            os.path.join(data_folder, split,
+                                        "room_embeddings_" + suffix + ".pt"),
+                        )
+                    else:
+                        torch.save(
+                            room_embedding,
+                            os.path.join(data_folder, split,
+                                        "room_embeddings_" + suffix + ".pt"),
+                        )
 
 
                     query_sentence_list.append(query_str)
@@ -356,7 +355,7 @@ class DataGenerator:
                 # Save room embeddings
                 if os.path.isfile(os.path.join(data_folder, split, "room_embeddings_" + suffix + ".pt")):
                     room_embeddings = torch.load(os.path.join(data_folder, split, "room_embeddings_" + suffix + ".pt"))
-                    room_embeddings = torch.vstack((query_embeddings,room_embedding))
+                    room_embeddings = torch.vstack((room_embeddings,room_embedding))
                     torch.save(
                         room_embeddings,
                         os.path.join(data_folder, split,
@@ -420,34 +419,34 @@ class DataGenerator:
         split_dict = {}
 
         # Train
-        # dg.extract_data(max_n, split="train")
-        # TEMP = {}
-        # count = 0
-        # for k, total in data_generation_params:
-        #     suffix = "train_k" + str(k) + "_total" + str(total)
-        #     sentences, all_objs_list, labels = dg.generate_data(
-        #         k, total, data_folder, 'train', suffix)
-        #     count += len(sentences)
-        #     TEMP[suffix] = [
-        #         sentences, all_objs_list, labels
-        #     ]
-        # split_dict["train"] = TEMP
-        # print(count, "train sentences")
+        dg.extract_data(max_n, split="train")
+        TEMP = {}
+        count = 0
+        for k, total in data_generation_params:
+            suffix = "train_k" + str(k) + "_total" + str(total)
+            sentences, all_objs_list, labels = dg.generate_data(
+                k, total, data_folder, 'train', suffix)
+            count += len(sentences)
+            TEMP[suffix] = [
+                sentences, all_objs_list, labels
+            ]
+        split_dict["train"] = TEMP
+        print(count, "train sentences")
 
         # Val
-        # dg.extract_data(max_n, split="val")
-        # TEMP = {}
-        # count = 0
-        # for k, total in data_generation_params:
-        #     suffix = "val_k" + str(k) + "_total" + str(total)
-        #     sentences, all_objs_list, labels = dg.generate_data(
-        #         k, total, data_folder, 'val', suffix)
-        #     count += len(sentences)
-        #     TEMP[suffix] = [
-        #         sentences, all_objs_list, labels
-        #     ]
-        # split_dict["val"] = TEMP
-        # print(count, "val sentences")
+        dg.extract_data(max_n, split="val")
+        TEMP = {}
+        count = 0
+        for k, total in data_generation_params:
+            suffix = "val_k" + str(k) + "_total" + str(total)
+            sentences, all_objs_list, labels = dg.generate_data(
+                k, total, data_folder, 'val', suffix)
+            count += len(sentences)
+            TEMP[suffix] = [
+                sentences, all_objs_list, labels
+            ]
+        split_dict["val"] = TEMP
+        print(count, "val sentences")
 
         # Test
         if k_test > 0:
@@ -476,14 +475,14 @@ if __name__ == "__main__":
     for lm in ["GPT-J"]:
         for label_set in ["nyuClass"]:
 
-            for use_gt in [True]:
+            for use_gt in [False]:
                 data_folder = os.path.join(
                     "./data/",
                     lm + "_" + label_set + "_useGT_" + str(use_gt) + "_502030")
                 if not os.path.exists(data_folder):
                     os.makedirs(data_folder)
-                # for split in ["train", "val", "test"]:
-                for split in ["test"]: ##xihang
+                for split in ["train", "val", "test"]:
+                # for split in ["test"]: ##xihang
                     if not os.path.exists(os.path.join(data_folder, split)):
                         os.makedirs(os.path.join(data_folder, split))
 
@@ -499,9 +498,9 @@ if __name__ == "__main__":
                 split_dict = dg.data_split_generator(data_generation_params,
                                                      k_test, data_folder)
                 # Save
-                # splits = ["train", "val", "test"
-                #           ] if k_test > 0 else ["train", "val"]
-                splits = ["test"]
+                splits = ["train", "val", "test"
+                          ] if k_test > 0 else ["train", "val"]
+                # splits = ["test"]
                     
                 for split in splits:
                     for suffix in split_dict[split]:

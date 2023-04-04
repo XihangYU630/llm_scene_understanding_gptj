@@ -6,8 +6,7 @@ import matplotlib.pyplot as plt
 
 import torch
 from torch.utils.data import Dataset, DataLoader
-# from torchvision import datasets
-# from torchvision.transforms import ToTensor
+
 import torch.nn.functional as F
 
 from dataset import FinetuningDataset, create_room_splits
@@ -33,7 +32,7 @@ def train_job(lm, label_set, use_gt, epochs, batch_size, seed=0):
 
     output_size = len(train_ds.room_list)
 
-    ff_net = FeedforwardNet(4096, output_size)
+    ff_net = FeedforwardNet(1024, output_size)
     ff_net.to(device)
 
     # 63.42, lr=0.00001, wd=0.001, ss=50, g=0.1
@@ -60,7 +59,6 @@ def train_job(lm, label_set, use_gt, epochs, batch_size, seed=0):
             train_epoch_acc = []
             val_epoch_acc = []
             for batch_idx, (query_em, _, label) in enumerate(train_dl):
-                query_em = query_em.to(torch.float32)
                 pred = ff_net(query_em)
                 loss = loss_fxn(pred, label)
 
@@ -80,7 +78,6 @@ def train_job(lm, label_set, use_gt, epochs, batch_size, seed=0):
 
             for batch_idx, (query_em, _, label) in enumerate(val_dl):
                 with torch.no_grad():
-                    query_em = query_em.to(torch.float32)
                     pred = ff_net(query_em)
                     loss = loss_fxn(pred, label)
                     val_epoch_loss.append(loss.item() * len(label))
@@ -110,7 +107,6 @@ def train_job(lm, label_set, use_gt, epochs, batch_size, seed=0):
     ff_net.eval()
     test_loss, test_acc = [], []
     for batch_idx, (query_em, _, label) in enumerate(test_dl):
-        query_em = query_em.to(torch.float32)
         pred = ff_net(query_em)
         loss = loss_fxn(pred, label)
         test_loss.append(loss.item())
@@ -140,9 +136,9 @@ if __name__ == "__main__":
         [],
     )
 
-    for lm in ["GPT-J"]:
+    for lm in ["RoBERTa-large"]:
         for label_set in ["nyuClass"]:
-            for use_gt in [True]:
+            for use_gt in [True, False]:
                 print("Starting:", lm, label_set, "use_gt =", use_gt)
                 (
                     train_losses,
@@ -151,7 +147,7 @@ if __name__ == "__main__":
                     val_acc,
                     test_loss,
                     test_acc,
-                ) = train_job(lm, label_set, use_gt, 1, batch_size=256)
+                ) = train_job(lm, label_set, use_gt, 200, 512)
                 train_losses_list.append(train_losses)
                 val_losses_list.append(val_losses)
                 train_acc_list.append(train_acc)
