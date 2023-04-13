@@ -28,7 +28,7 @@ from transformers import (
 
 def make_bldg_room_co():
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    dataset = Matterport3dDataset('./mp_data/bldg_infer.pkl')
+    dataset = Matterport3dDataset('./mp_data/bldg_infer_new.pkl')
 
     labels, pl_labels = create_label_lists(dataset)
     building_list, room_list, object_list = labels

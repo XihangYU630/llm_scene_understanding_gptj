@@ -185,8 +185,8 @@ class DataGenerator:
                                           return_tensors="pt").to(self.device))
 
                 outputs = self.lm_model(tokens_tensor)
-                print(outputs)
-                print(outputs.last_hidden_state.shape)
+                # print(outputs)
+                # print(outputs.last_hidden_state.shape)
                 # Shape (batch size=1, hidden state size)
                 return outputs.last_hidden_state[:, -1]
 
@@ -303,18 +303,33 @@ class DataGenerator:
                 qs = self._room_query_constructor(rooms)
                 embedding = self.embedder(qs)
                 query_sentence_dict[split].append(qs)
-                query_embedding_dict[split].append(embedding)
+                # query_embedding_dict[split].append(embedding)
                 label_dict[split].append(label)
+
+                # Save query embeddings
+                if os.path.isfile(os.path.join(data_folder,"query_embeddings_" + split + ".pt")):
+                    query_embeddings = torch.load(os.path.join(data_folder,"query_embeddings_" + split + ".pt"))
+                    query_embeddings = torch.vstack((query_embeddings,embedding))
+                    torch.save(
+                        query_embeddings,
+                        os.path.join(data_folder, "query_embeddings_" + split + ".pt"),
+                    )
+                else:
+                    torch.save(
+                        embedding,
+                        os.path.join(data_folder,"query_embeddings_" + split + ".pt"),
+                    )
+
 
         label_tensor_dict = {
             split: torch.tensor(label_dict[split])
             for split in ["train", "val", "test"]
         }
-        query_embedding_tensor_dict = {
-            split: torch.vstack(query_embedding_dict[split])
-            for split in ["train", "val", "test"]
-        }
-        return query_sentence_dict, query_embedding_tensor_dict, label_tensor_dict
+        # query_embedding_tensor_dict = {
+        #     split: torch.vstack(query_embedding_dict[split])
+        #     for split in ["train", "val", "test"]
+        # }
+        return query_sentence_dict, label_tensor_dict
 
     def _room_query_constructor(self, rooms):
         query_str = "This building contains "
@@ -341,10 +356,9 @@ if __name__ == "__main__":
         dg = DataGenerator()
         dg.configure_lm(lm)
         dg.extract_data(num_samples, num_rooms_per_bldg)
-        qs_dict, qe_tensor_dict, label_tensor_dict = dg.generate_data()
+        qs_dict, label_tensor_dict = dg.generate_data()
 
         for split in ["train", "val", "test"]:
-            print(qe_tensor_dict[split].shape)
             print(label_tensor_dict[split].shape)
 
             with open(
@@ -358,8 +372,8 @@ if __name__ == "__main__":
             torch.save(label_tensor_dict[split],
                        os.path.join(data_folder, "labels_" + split + ".pt"))
 
-            # Save query embeddings
-            torch.save(
-                qe_tensor_dict[split],
-                os.path.join(data_folder, "query_embeddings_" + split + ".pt"),
-            )
+            # # Save query embeddings
+            # torch.save(
+            #     qe_tensor_dict[split],
+            #     os.path.join(data_folder, "query_embeddings_" + split + ".pt"),
+            # )

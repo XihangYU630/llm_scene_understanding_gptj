@@ -10,7 +10,7 @@ from torch.utils.data import Dataset, DataLoader
 import torch.nn.functional as F
 
 from dataset import create_building_splits, create_comparison_building_splits
-from models import ContrastiveNet, FeedforwardNet
+from models import ContrastiveNet, FeedforwardNet, FeedforwardNet_GPTJ
 
 
 def train_job(lm, epochs, batch_size, co_suffix="", seed=0):
@@ -30,13 +30,14 @@ def train_job(lm, epochs, batch_size, co_suffix="", seed=0):
 
     output_size = len(train_ds.building_list)
 
-    ff_net = FeedforwardNet(1024, output_size)
+    ff_net = FeedforwardNet_GPTJ(4096, output_size)
     ff_net.to(device)
 
+
+    # 87.88, lr=0.0001, wd=0.001, ss=20, g=0.99 epoch = 2
     optimizer = torch.optim.Adam(ff_net.parameters(),
                                  lr=0.0001,
                                  weight_decay=0.001)
-
     loss_fxn = ff_loss
     scheduler = torch.optim.lr_scheduler.StepLR(optimizer,
                                                 step_size=20,
@@ -56,11 +57,12 @@ def train_job(lm, epochs, batch_size, co_suffix="", seed=0):
             train_epoch_acc = []
             val_epoch_acc = []
             for batch_idx, (query_em, label) in enumerate(train_dl):
+                query_em = query_em.to(torch.float32)
                 pred = ff_net(query_em)
 
                 loss = loss_fxn(pred, label)
                 optimizer.zero_grad()
-                loss.backward()
+                loss.backward(retain_graph=True)
                 optimizer.step()
                 train_epoch_loss.append(loss.item())
 
@@ -76,6 +78,7 @@ def train_job(lm, epochs, batch_size, co_suffix="", seed=0):
 
             for batch_idx, (query_em, label) in enumerate(val_dl):
                 with torch.no_grad():
+                    query_em = query_em.to(torch.float32)
                     pred = ff_net(query_em)
                     loss = loss_fxn(pred, label)
                     val_epoch_loss.append(loss.item())
@@ -95,6 +98,7 @@ def train_job(lm, epochs, batch_size, co_suffix="", seed=0):
     test_acc_by_class = {bldg: [0, 0] for bldg in test_ds.building_list}
     for batch_idx, (query_em, label) in enumerate(test_dl):
         with torch.no_grad():
+            query_em = query_em.to(torch.float32)
             pred = ff_net(query_em)
             loss = loss_fxn(pred, label)
             test_loss.append(loss.item())
@@ -136,7 +140,7 @@ if __name__ == "__main__":
         [],
     )
 
-    for lm in ["RoBERTa-large"]:
+    for lm in ["GPT-J"]:
 
         print("Starting:", lm)
         co_suffix = "_gt"
@@ -147,7 +151,7 @@ if __name__ == "__main__":
             val_acc,
             test_loss,
             test_acc,
-        ) = train_job(lm, 100, 512, co_suffix=co_suffix)
+        ) = train_job(lm, 10, 512, co_suffix=co_suffix)
         train_losses_list.append(train_losses)
         val_losses_list.append(val_losses)
         train_acc_list.append(train_acc)

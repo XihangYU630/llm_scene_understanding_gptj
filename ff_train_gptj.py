@@ -39,9 +39,9 @@ def train_job(lm, label_set, use_gt, epochs, batch_size, seed=0):
     # 63.42, lr=0.00001, wd=0.001, ss=50, g=0.1
     # 64.49, lr=0.0001, wd=0.001, ss=10, g=0.5
     # 67.00, lr=0.00005, wd=0.05, ss=10, g=0.5 True
-    # 55.94, lr=0.000009, wd=0.001, ss=10, g=0.5 False
+    # 56.34, lr=0.000009, wd=0.001, ss=10, g=0.5 False epoch = 5
     optimizer = torch.optim.Adam(ff_net.parameters(),
-                                 lr=0.000009,
+                                 lr=0.00001,
                                  weight_decay=0.001)
     scheduler = torch.optim.lr_scheduler.StepLR(optimizer,
                                                 step_size=10,
@@ -65,7 +65,7 @@ def train_job(lm, label_set, use_gt, epochs, batch_size, seed=0):
                 query_em = query_em.to(torch.float32)
                 pred = ff_net(query_em)
                 loss = loss_fxn(pred, label)
-
+                optimizer.zero_grad()
                 loss.backward()
                 optimizer.step()
                 train_epoch_loss.append(loss.item())
@@ -153,7 +153,7 @@ if __name__ == "__main__":
                     val_acc,
                     test_loss,
                     test_acc,
-                ) = train_job(lm, label_set, use_gt, 1, batch_size=256)
+                ) = train_job(lm, label_set, use_gt, 10, batch_size=512)
                 train_losses_list.append(train_losses)
                 val_losses_list.append(val_losses)
                 train_acc_list.append(train_acc)

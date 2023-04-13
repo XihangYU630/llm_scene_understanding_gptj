@@ -44,7 +44,7 @@ def train_job(lm, label_set, epochs, batch_size, co_suffix="", seed=0):
     scheduler = torch.optim.lr_scheduler.StepLR(optimizer,
                                                 step_size=20,
                                                 gamma=0.9)
-
+    optimizer.zero_grad()
     loss_fxn = contrastive_loss
 
     train_losses = []
@@ -65,7 +65,7 @@ def train_job(lm, label_set, epochs, batch_size, co_suffix="", seed=0):
                 pred = embed1 @ embed2.T
 
                 loss = loss_fxn(pred, label)
-
+                optimizer.zero_grad()
                 loss.backward()
                 optimizer.step()
                 train_epoch_loss.append(loss.item())
@@ -167,7 +167,7 @@ if __name__ == "__main__":
                     val_acc,
                     test_loss,
                     test_acc,
-                ) = train_job(lm, label_set, 200, 512, co_suffix=co_suffix)
+                ) = train_job(lm, label_set, 10, 512, co_suffix=co_suffix)
                 train_losses_list.append(train_losses)
                 val_losses_list.append(val_losses)
                 train_acc_list.append(train_acc)
