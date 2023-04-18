@@ -4,7 +4,7 @@
 
 *Equal Contribution
 
-<img src="images/plot.png" width="250" height="300">
+<img src="images/plot.png" width="500" height="600">
 
 # Table of Contents
 1. [Overview](#overview)
