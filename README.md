@@ -4,7 +4,7 @@
 
 *Equal Contribution
 
-![visualization](https://github.com/MIT-SPARK/llm_scene_understanding/blob/main/images/RealDSGExample.png)
+![visualization](https://github.com/XihangYU630/llm_scene_understanding_gptj/images/RealDSGExample.png)
 
 # Table of Contents
 1. [Overview](#overview)
