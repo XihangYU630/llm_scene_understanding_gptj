@@ -2,7 +2,7 @@
 
 *Ruoyu Wang, *Weihan Xu, *Xihang Yu
 
-Equal Contribution
+*Equal Contribution
 
 ![visualization](https://github.com/MIT-SPARK/llm_scene_understanding/blob/main/images/RealDSGExample.png)
 
