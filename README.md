@@ -5,6 +5,7 @@
 *Equal Contribution
 
 ![visualization](images/plot.png)
+![](images/plot.png =250x250)
 
 # Table of Contents
 1. [Overview](#overview)
