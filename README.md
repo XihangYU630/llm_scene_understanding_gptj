@@ -1,6 +1,8 @@
 # Is Large Language Model All You Need for 3D Scene Understanding
 
-Ruoyu Wang, Weihan Xu, Xihang Yu
+*Ruoyu Wang, *Weihan Xu, *Xihang Yu
+
+Equal Contribution
 
 ![visualization](https://github.com/MIT-SPARK/llm_scene_understanding/blob/main/images/RealDSGExample.png)
 
