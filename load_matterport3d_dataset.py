@@ -44,4 +44,6 @@ class Matterport3dDataset:
         return [self.__dataset[i] for i in self.train_val_test_split[1]]
 
     def get_test_set(self):
-        return [self.__dataset[i] for i in self.train_val_test_split[2]]
+        data = [self.__dataset[i] for i in self.train_val_test_split[2]]
+        tmp = 1
+        return data

@@ -466,16 +466,16 @@ class DataGenerator:
 
 
 if __name__ == "__main__":
-    import os
+    # import os
     #一机多卡设置
-    os.environ['CUDA_VISIBLE_DEVICES'] = '0, 1'  #'0,1'
-    device_ids = [0, 1]    #[0,1]
+    # os.environ['CUDA_VISIBLE_DEVICES'] = '0, 1'  #'0,1'
+    # device_ids = [0, 1]    #[0,1]
 
     
     for lm in ["GPT-J"]:
         for label_set in ["nyuClass"]:
 
-            for use_gt in [False]:
+            for use_gt in [True]:
                 data_folder = os.path.join(
                     "./data/",
                     lm + "_" + label_set + "_useGT_" + str(use_gt) + "_502030")
@@ -491,8 +491,9 @@ if __name__ == "__main__":
                                    use_gt_cooccurrencies=use_gt)
                 dg.configure_lm(lm)
 
-                data_generation_params = [(1, 1), (2, 2), (3, 3), (1, 2),
-                                          (2, 3), (3, 4)]
+                # data_generation_params = [(1, 1), (2, 2), (3, 3), (1, 2),
+                #                           (2, 3), (3, 4)]
+                data_generation_params = [(4,4)]
                 k_test = 3
 
                 split_dict = dg.data_split_generator(data_generation_params,

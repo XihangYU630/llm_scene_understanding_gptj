@@ -166,7 +166,7 @@ def dynamic_lm_refinements(
         scoring_fxn = pll
 
     dataset = Matterport3dDataset(
-        "./mp_data/" + label_set + "_matterport3d_w_edge_new.pkl"
+        "./mp_data/" + label_set + "_matterport3d_w_edge_502030_new.pkl"
     )  # TODO: Change back out of _502030 if needed
 
     labels, pl_labels = create_label_lists(dataset)
@@ -293,9 +293,9 @@ if __name__ == "__main__":
 
     df = pd.DataFrame(columns=["lm", "cooccurrencies", "accuracy"])
 
-    for use_test in [True, False]:
+    for use_test in [True]:
         for label_set in ["nyuClass"]:
-            for co in [True, False]:
+            for co in [False]:
                 for lm in lms:
                     print("label set:", label_set, "lm:", lm,
                           "use cooccurrencies:", co, "use test:", use_test)

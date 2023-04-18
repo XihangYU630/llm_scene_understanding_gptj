@@ -138,7 +138,7 @@ if __name__ == "__main__":
 
     for lm in ["RoBERTa-large"]:
         for label_set in ["nyuClass"]:
-            for use_gt in [False]:
+            for use_gt in [True]:
                 print("Starting:", lm, label_set, "use_gt =", use_gt)
                 (
                     train_losses,

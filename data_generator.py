@@ -331,8 +331,8 @@ class DataGenerator:
 
                     query_sentence_list.append(query_str)
                     label_list.append(label)
-                    # query_embedding_list.append(query_embedding)
-                    # room_embedding_list.append(room_embedding)
+                    query_embedding_list.append(query_embedding)
+                    room_embedding_list.append(room_embedding)
                     all_objs_list.append(all_objs)
             else:
                 objs_p = torch.tensor(np_objs)
@@ -394,37 +394,37 @@ class DataGenerator:
 
         split_dict = {}
 
-        # Train
-        dg.extract_data(max_n, split="train")
-        TEMP = {}
-        count = 0
-        for k, total in data_generation_params:
-            suffix = "train_k" + str(k) + "_total" + str(total)
-            sentences, all_objs_list, labels, query_embeddings, room_embeddings = dg.generate_data(
-                k, total)
-            count += len(sentences)
-            TEMP[suffix] = [
-                sentences, all_objs_list, labels, query_embeddings,
-                room_embeddings
-            ]
-        split_dict["train"] = TEMP
-        print(count, "train sentences")
+        # # Train
+        # dg.extract_data(max_n, split="train")
+        # TEMP = {}
+        # count = 0
+        # for k, total in data_generation_params:
+        #     suffix = "train_k" + str(k) + "_total" + str(total)
+        #     sentences, all_objs_list, labels, query_embeddings, room_embeddings = dg.generate_data(
+        #         k, total)
+        #     count += len(sentences)
+        #     TEMP[suffix] = [
+        #         sentences, all_objs_list, labels, query_embeddings,
+        #         room_embeddings
+        #     ]
+        # split_dict["train"] = TEMP
+        # print(count, "train sentences")
 
-        # Val
-        dg.extract_data(max_n, split="val")
-        TEMP = {}
-        count = 0
-        for k, total in data_generation_params:
-            suffix = "val_k" + str(k) + "_total" + str(total)
-            sentences, all_objs_list, labels, query_embeddings, room_embeddings = dg.generate_data(
-                k, total)
-            count += len(sentences)
-            TEMP[suffix] = [
-                sentences, all_objs_list, labels, query_embeddings,
-                room_embeddings
-            ]
-        split_dict["val"] = TEMP
-        print(count, "val sentences")
+        # # Val
+        # dg.extract_data(max_n, split="val")
+        # TEMP = {}
+        # count = 0
+        # for k, total in data_generation_params:
+        #     suffix = "val_k" + str(k) + "_total" + str(total)
+        #     sentences, all_objs_list, labels, query_embeddings, room_embeddings = dg.generate_data(
+        #         k, total)
+        #     count += len(sentences)
+        #     TEMP[suffix] = [
+        #         sentences, all_objs_list, labels, query_embeddings,
+        #         room_embeddings
+        #     ]
+        # split_dict["val"] = TEMP
+        # print(count, "val sentences")
 
         # Test
         if k_test > 0:
@@ -451,10 +451,10 @@ if __name__ == "__main__":
     device_ids = [0, 1]    #[0,1]
 
     
-    for lm in ["GPT-J"]:
+    for lm in ["RoBERTa-large"]:
         for label_set in ["nyuClass"]:
 
-            for use_gt in [True, False]:
+            for use_gt in [False]:
                 data_folder = os.path.join(
                     "./data/",
                     lm + "_" + label_set + "_useGT_" + str(use_gt) + "_502030")
@@ -469,8 +469,9 @@ if __name__ == "__main__":
                                    use_gt_cooccurrencies=use_gt)
                 dg.configure_lm(lm)
 
-                data_generation_params = [(1, 1), (2, 2), (3, 3), (1, 2),
-                                          (2, 3), (3, 4)]
+                # data_generation_params = [(1, 1), (2, 2), (3, 3), (1, 2),
+                #                           (2, 3), (3, 4)]
+                data_generation_params = [(4,4)]
                 k_test = 3
 
                 split_dict = dg.data_split_generator(data_generation_params,

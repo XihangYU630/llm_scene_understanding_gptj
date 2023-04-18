@@ -164,7 +164,7 @@ if __name__ == "__main__":
 
     for lm in ["GPT-J"]:
         for label_set in ["nyuClass"]:
-            for use_gt in [True, False]:
+            for use_gt in [True]:
                 print("Starting:", lm, label_set, "use_gt =", use_gt)
                 co_suffix = "" if use_gt else "_gpt_j_co"
                 (
