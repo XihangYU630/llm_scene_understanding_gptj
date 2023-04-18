@@ -28,9 +28,10 @@ After cloning this repo:
 
 ## Running Code
 - `python zero_shot_<rooms/bldgs>.py` runs our zero-shot language approach on the entire Matterport3D dataset to predict either rooms given objects or buildings given rooms.
-- `python <ff/contrastive>_train.py` runs our feed-forward or contrastive training approaches respectively.
-  - Run `python data_generator.py` prior to the above to generate the bootstrapped data needed for training and evaluation.
-- `python bldg_ff_train.py` and `python bldg_data_generator_comparison.py` are the equivalents for building-prediction. Note that said data generator does _not_ bootstrap datapoints for the test set, instead just using the same test set as `zero_shot_bldgs.py` for easier comparison.
+- `python <ff/contrastive>_train(_gptj).py` runs our feed-forward or contrastive training approaches respectively.
+  - Run `python data_generator(_gptj).py` prior to the above to generate the bootstrapped data needed for training and evaluation.
+- `python bldg_ff_train(_gptj).py` and `python bldg_data_generator_comparison(_gptj).py` are the equivalents for building-prediction. Note that said data generator does _not_ bootstrap datapoints for the test set, instead just using the same test set as `zero_shot_bldgs.py` for easier comparison.
+- `python create_label_embedding_gptj.py` to create room label strings embeddings for contrastive network.
 - `python <ff/contrastive>_holdout_tests.py` runs training on a dataset with certain objects withheld, then evaluating on datapoints with those previously-unseen objects.
 - `python <ff/contrastive>_label_space_test.py` runs training on the mpcat40 label space dataset, then evaluates on the larger nyuClass label space dataset.
 - Some other utility functions and scripts are included as well, such as `compute_cooccurrencies.py`, which generates co-occurrency matrices (i.e. counting frequencies of room-object pairs)
