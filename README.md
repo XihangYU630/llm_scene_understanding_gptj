@@ -2,6 +2,8 @@
 
 Ruoyu Wang, Weihan Xu, Xihang Yu
 
+![visualization](https://github.com/MIT-SPARK/llm_scene_understanding/blob/main/images/RealDSGExample.png)
+
 # Table of Contents
 1. [Overview](#overview)
 2. [Requirements](#requirements)
