@@ -4,8 +4,7 @@
 
 *Equal Contribution
 
-![visualization](images/plot.png)
-![](images/plot.png =250x250)
+<img src="images/plot.png" width="1000" height="300">
 
 # Table of Contents
 1. [Overview](#overview)
