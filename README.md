@@ -4,7 +4,7 @@
 
 *Equal Contribution
 
-![visualization](https://github.com/XihangYU630/llm_scene_understanding_gptj/images/plot.png)
+![visualization](https://github.com/XihangYU630/llm_scene_understanding_gptj/blob/master/images/plot.png)
 
 # Table of Contents
 1. [Overview](#overview)
