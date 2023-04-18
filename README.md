@@ -6,11 +6,10 @@ Ruoyu Wang, Weihan Xu, Xihang Yu
 1. [Overview](#overview)
 2. [Requirements](#requirements)
 3. [Running Code](#running-code)
-4. [Real Scene Graph Labeling Visualization](#real-scene-graph-labeling-visualization)
-5. [Citation](#citation)
 
 ## Overview
-This repo contains code for the paper _Leveraging Language Models for Robot 3D Scene Understanding_. We present several methods for leveraging language models for 3D scene understanding on scene graphs, like those produced by the [Hydra spatial perception system](https://arxiv.org/abs/2201.13360). We test our algorithms on scene graphs generated from the [Matterport3D semantic mesh dataset](https://niessner.github.io/Matterport/).
+
+Robotic applications rely on scene understanding to analyze objects within a 3D environment. One crucial component of scene understanding is semantics labeling, which involves assigning class labels to semantic regions based on the objects within them. In a recent study [Leveraging Large Language Model for 3D Scene Understanding](https://arxiv.org/abs/2209.05629) , Large Language Models (LLMs) were found to be effective in incorporating common sense knowledge during the labeling process. In this project, we aim to compare two LLMs, GPT-J and RoBERTa, using fine-tuned feed-forward and contrastive networks, which were not evaluated in \cite{chen2022leveraging}, for the semantic labeling task. The contributions of this project are twofold: (i) The proposed GPT-J with fine-tuned feed-forward network achieves state-of-the-art(SOTA) performance, and (ii) by varying the number of candidate objects, adopting ChatGPT-based room detection and fine-tuning a whole BERT-based network, we explore the possible performance bottleneck of our proposed GPT-J pretrained network.
 
 ## Requirements
 Before starting, you will need:
@@ -35,12 +34,3 @@ After cloning this repo:
 - `python <ff/contrastive>_holdout_tests.py` runs training on a dataset with certain objects withheld, then evaluating on datapoints with those previously-unseen objects.
 - `python <ff/contrastive>_label_space_test.py` runs training on the mpcat40 label space dataset, then evaluates on the larger nyuClass label space dataset.
 - Some other utility functions and scripts are included as well, such as `compute_cooccurrencies.py`, which generates co-occurrency matrices (i.e. counting frequencies of room-object pairs)
-
-## Real Scene Graph Labeling Visualization
-![visualization](https://github.com/MIT-SPARK/llm_scene_understanding/blob/main/images/RealDSGExample.png)
-We ran our zero-shot room-labeling approach on three real scene graphs created using [Hydra](https://arxiv.org/abs/2201.13360). We provide the visualizations displaying the room bounding box floors, object nodes, and room nodes (which have ground truth and inferred labels attached as well). To open them, either download and open the HTML files found [here](https://github.com/MIT-SPARK/llm_scene_understanding/tree/main/real_dsg_vis) in a local browser or use the following links. Note that the latter option may take some time to load.
-- [College Dorm](https://htmlpreview.github.io/?https://github.com/MIT-SPARK/llm_scene_understanding/blob/main/real_dsg_vis/sidpac_floor1_3_vis.html)
-- [Apartment](https://htmlpreview.github.io/?https://github.com/MIT-SPARK/llm_scene_understanding/blob/main/real_dsg_vis/uh2_apartment_vis.html)
-- [Office](https://htmlpreview.github.io/?https://github.com/MIT-SPARK/llm_scene_understanding/blob/main/real_dsg_vis/uh2_office_vis.html)
-
-Alternatively, we provide all the rooms' query strings, ground truth labels, and inferred labels in the dropdown below. Note some rooms are omitted due to abnormal ground truth room labels or lack of objects contained within.
