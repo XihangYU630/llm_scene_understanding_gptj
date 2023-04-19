@@ -1,6 +1,8 @@
-# Is large language model all you need for 3D understanding? 
+# Is Large Language Model All You Need for 3D Scene Understanding
 
-Ruoyu Wang, Xihang Yu, and Weihan Xu
+*Ruoyu Wang, *Weihan Xu, *Xihang Yu
+
+*Equal Contribution
 
 
 
