@@ -331,7 +331,7 @@ if __name__ == "__main__":
     # Goes through bldg_infer.pkl scene graph and creates data for feed-forward
     # method (train / val / test)
 
-    for lm in ["GPT-J"]:
+    for lm in ["RoBERTa-large", "BERT-large"]:
         data_folder = os.path.join("./building_data/comparison_data",
                                    lm + "_gt")
         if not os.path.exists(data_folder):

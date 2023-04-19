@@ -50,8 +50,8 @@ class DataGenerator:
 
         self.excluded_rooms = ["None", "yard", "porch", "balcony"]
 
-        # if self.verbose:
-        #     print("Using device:", self.device)
+        if self.verbose:
+            print("Using device:", self.device)
 
         # create data loader
         # self.dataloader = DataLoader(dataset, batch_size=82)
@@ -136,7 +136,6 @@ class DataGenerator:
                 revision="float16",
                 torch_dtype=torch.float16,  # low_cpu_mem_usage=True
             )
-            # revision="float16",
         else:
             print("Model option " + lm + " not implemented yet")
             raise
@@ -144,7 +143,6 @@ class DataGenerator:
         self.lm_model = lm_model
         self.lm_model.eval()
         self.lm_model = self.lm_model.to(self.device)
-
 
         self.tokenizer = tokenizer
 
@@ -191,8 +189,8 @@ class DataGenerator:
                                           return_tensors="pt").to(self.device))
 
                 outputs = self.lm_model(tokens_tensor)
-                # print(outputs)
-                # print(outputs.last_hidden_state.shape)
+                print(outputs)
+                print(outputs.last_hidden_state.shape)
                 # Shape (batch size=1, hidden state size)
                 return outputs.last_hidden_state[:, -1]
 
@@ -205,7 +203,8 @@ class DataGenerator:
                     [self.tokenizer.convert_tokens_to_ids(tokenized_text)])
                 """ tokens_tensor = torch.tensor([indexed_tokens.to(self.device)])
                  """
-                tokens_tensor = tokens_tensor.to(self.device)  # if you have gpu
+                tokens_tensor = tokens_tensor.to(
+                    self.device)  # if you have gpu
 
                 with torch.no_grad():
                     outputs = self.lm_model(tokens_tensor)
@@ -319,15 +318,13 @@ class DataGenerator:
             np_objs = objs[:n].cpu().numpy()
             np_label = label.cpu().numpy()
             if all_permutations:
-                multiset_permutations_tmp = multiset_permutations(np_objs, k_room)
-                for np_objs_p in multiset_permutations_tmp:
+                for np_objs_p in multiset_permutations(np_objs, k_room):
                     objs_p = torch.tensor(np_objs_p)
                     query_str = self._object_query_constructor(objs_p)
                     room_str = self._room_str_constructor(np_label)
 
                     query_embedding = self.embedder(query_str)
                     room_embedding = self.embedder(room_str)
-
 
                     query_sentence_list.append(query_str)
                     label_list.append(label)
@@ -394,37 +391,37 @@ class DataGenerator:
 
         split_dict = {}
 
-        # # Train
-        # dg.extract_data(max_n, split="train")
-        # TEMP = {}
-        # count = 0
-        # for k, total in data_generation_params:
-        #     suffix = "train_k" + str(k) + "_total" + str(total)
-        #     sentences, all_objs_list, labels, query_embeddings, room_embeddings = dg.generate_data(
-        #         k, total)
-        #     count += len(sentences)
-        #     TEMP[suffix] = [
-        #         sentences, all_objs_list, labels, query_embeddings,
-        #         room_embeddings
-        #     ]
-        # split_dict["train"] = TEMP
-        # print(count, "train sentences")
+        # Train
+        dg.extract_data(max_n, split="train")
+        TEMP = {}
+        count = 0
+        for k, total in data_generation_params:
+            suffix = "train_k" + str(k) + "_total" + str(total)
+            sentences, all_objs_list, labels, query_embeddings, room_embeddings = dg.generate_data(
+                k, total)
+            count += len(sentences)
+            TEMP[suffix] = [
+                sentences, all_objs_list, labels, query_embeddings,
+                room_embeddings
+            ]
+        split_dict["train"] = TEMP
+        print(count, "train sentences")
 
-        # # Val
-        # dg.extract_data(max_n, split="val")
-        # TEMP = {}
-        # count = 0
-        # for k, total in data_generation_params:
-        #     suffix = "val_k" + str(k) + "_total" + str(total)
-        #     sentences, all_objs_list, labels, query_embeddings, room_embeddings = dg.generate_data(
-        #         k, total)
-        #     count += len(sentences)
-        #     TEMP[suffix] = [
-        #         sentences, all_objs_list, labels, query_embeddings,
-        #         room_embeddings
-        #     ]
-        # split_dict["val"] = TEMP
-        # print(count, "val sentences")
+        # Val
+        dg.extract_data(max_n, split="val")
+        TEMP = {}
+        count = 0
+        for k, total in data_generation_params:
+            suffix = "val_k" + str(k) + "_total" + str(total)
+            sentences, all_objs_list, labels, query_embeddings, room_embeddings = dg.generate_data(
+                k, total)
+            count += len(sentences)
+            TEMP[suffix] = [
+                sentences, all_objs_list, labels, query_embeddings,
+                room_embeddings
+            ]
+        split_dict["val"] = TEMP
+        print(count, "val sentences")
 
         # Test
         if k_test > 0:
@@ -445,16 +442,9 @@ class DataGenerator:
 
 
 if __name__ == "__main__":
-    import os
-    #一机多卡设置
-    os.environ['CUDA_VISIBLE_DEVICES'] = '0, 1'  #'0,1'
-    device_ids = [0, 1]    #[0,1]
-
-    
-    for lm in ["RoBERTa-large"]:
-        for label_set in ["nyuClass"]:
-
-            for use_gt in [False]:
+    for lm in ["RoBERTa-large", "BERT-large"]:
+        for label_set in ["nyuClass", "mpcat40"]:
+            for use_gt in [True, False]:
                 data_folder = os.path.join(
                     "./data/",
                     lm + "_" + label_set + "_useGT_" + str(use_gt) + "_502030")
@@ -469,9 +459,8 @@ if __name__ == "__main__":
                                    use_gt_cooccurrencies=use_gt)
                 dg.configure_lm(lm)
 
-                # data_generation_params = [(1, 1), (2, 2), (3, 3), (1, 2),
-                #                           (2, 3), (3, 4)]
-                data_generation_params = [(4,4)]
+                data_generation_params = [(1, 1), (2, 2), (3, 3), (1, 2),
+                                          (2, 3), (3, 4)]
                 k_test = 3
 
                 split_dict = dg.data_split_generator(data_generation_params,
@@ -520,4 +509,3 @@ if __name__ == "__main__":
                             os.path.join(data_folder, split,
                                          "room_embeddings_" + suffix + ".pt"),
                         )
-        

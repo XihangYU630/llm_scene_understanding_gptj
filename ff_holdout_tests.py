@@ -6,12 +6,12 @@ import matplotlib.pyplot as plt
 
 import torch
 from torch.utils.data import Dataset, DataLoader
-# from torchvision import datasets
-# from torchvision.transforms import ToTensor
+from torchvision import datasets
+from torchvision.transforms import ToTensor
 import torch.nn.functional as F
 
 from dataset import FinetuningDataset
-from models import ContrastiveNet, FeedforwardNet,FeedforwardNet_GPTJ
+from models import ContrastiveNet, FeedforwardNet
 
 
 def train_job(
@@ -23,7 +23,7 @@ def train_job(
         return F.cross_entropy(pred, label)
 
     # Create datasets
-    ds = FeedforwardNet_GPTJ(lm, label_set, co_suffix)
+    ds = FinetuningDataset(lm, label_set, co_suffix)
     train_ds, val_ds, test_ds, holdout_ds = ds.create_holdout_split(
         0.4, 0.2, holdout_objs, holdout_rooms
     )

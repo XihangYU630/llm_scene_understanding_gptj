@@ -1,4 +1,4 @@
-from load_matterport3d_dataset import Matterport3dDataset
+from dataset_loader.load_matterport3d_dataset import Matterport3dDataset
 from extract_labels import *
 import torch
 from torch_geometric.loader import DataLoader
@@ -14,7 +14,7 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 batch_size = 82
 
 dataset = Matterport3dDataset('./mp_data/matterport3d/' + dataset_name +
-                              '_matterport3d_w_edge.pkl')
+                              '_matterport3d_w_edge_new.pkl')
 
 labels, pl_labels = create_label_lists(dataset)
 building_list, room_list, object_list = labels

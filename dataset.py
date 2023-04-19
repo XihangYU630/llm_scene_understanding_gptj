@@ -5,8 +5,8 @@ from load_matterport3d_dataset import Matterport3dDataset
 from extract_labels import create_label_lists
 import torch
 from torch.utils.data import Dataset
-# from torchvision import datasets
-# from torchvision.transforms import ToTensor
+from torchvision import datasets
+from torchvision.transforms import ToTensor
 
 
 class FinetuningDataset(Dataset):

@@ -9,7 +9,7 @@ import pickle
 from extract_labels import create_label_lists
 import torch
 import torch_geometric
-# import gensim
+import gensim
 from torch_geometric.loader import DataLoader
 import numpy as np
 from matplotlib import pyplot as plt
@@ -166,7 +166,7 @@ def dynamic_lm_refinements(
         scoring_fxn = pll
 
     dataset = Matterport3dDataset(
-        "./mp_data/" + label_set + "_matterport3d_w_edge_502030_new.pkl"
+        "./mp_data/" + label_set + "_matterport3d_w_edge_new.pkl"
     )  # TODO: Change back out of _502030 if needed
 
     labels, pl_labels = create_label_lists(dataset)
@@ -293,9 +293,9 @@ if __name__ == "__main__":
 
     df = pd.DataFrame(columns=["lm", "cooccurrencies", "accuracy"])
 
-    for use_test in [True]:
-        for label_set in ["nyuClass"]:
-            for co in [False]:
+    for use_test in [True, False]:
+        for label_set in ["nyuClass", "mpcat40"]:
+            for co in [True, False]:
                 for lm in lms:
                     print("label set:", label_set, "lm:", lm,
                           "use cooccurrencies:", co, "use test:", use_test)

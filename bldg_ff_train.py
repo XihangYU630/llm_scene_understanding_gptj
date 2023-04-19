@@ -6,7 +6,8 @@ import matplotlib.pyplot as plt
 
 import torch
 from torch.utils.data import Dataset, DataLoader
-
+from torchvision import datasets
+from torchvision.transforms import ToTensor
 import torch.nn.functional as F
 
 from dataset import create_building_splits, create_comparison_building_splits
@@ -59,7 +60,7 @@ def train_job(lm, epochs, batch_size, co_suffix="", seed=0):
                 pred = ff_net(query_em)
 
                 loss = loss_fxn(pred, label)
-                optimizer.zero_grad()
+
                 loss.backward()
                 optimizer.step()
                 train_epoch_loss.append(loss.item())
@@ -136,7 +137,7 @@ if __name__ == "__main__":
         [],
     )
 
-    for lm in ["RoBERTa-large"]:
+    for lm in ["RoBERTa-large", "BERT-large"]:
 
         print("Starting:", lm)
         co_suffix = "_gt"

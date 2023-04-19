@@ -6,7 +6,8 @@ import matplotlib.pyplot as plt
 
 import torch
 from torch.utils.data import Dataset, DataLoader
-
+from torchvision import datasets
+from torchvision.transforms import ToTensor
 import torch.nn.functional as F
 
 from dataset import FinetuningDataset, create_room_splits
@@ -61,7 +62,7 @@ def train_job(lm, label_set, use_gt, epochs, batch_size, seed=0):
             for batch_idx, (query_em, _, label) in enumerate(train_dl):
                 pred = ff_net(query_em)
                 loss = loss_fxn(pred, label)
-                optimizer.zero_grad()
+
                 loss.backward()
                 optimizer.step()
                 train_epoch_loss.append(loss.item())
@@ -136,9 +137,9 @@ if __name__ == "__main__":
         [],
     )
 
-    for lm in ["RoBERTa-large"]:
-        for label_set in ["nyuClass"]:
-            for use_gt in [True]:
+    for lm in ["RoBERTa-large", "BERT-large"]:
+        for label_set in ["nyuClass", "mpcat40"]:
+            for use_gt in [True, False]:
                 print("Starting:", lm, label_set, "use_gt =", use_gt)
                 (
                     train_losses,
@@ -147,7 +148,7 @@ if __name__ == "__main__":
                     val_acc,
                     test_loss,
                     test_acc,
-                ) = train_job(lm, label_set, use_gt, 10, 512)
+                ) = train_job(lm, label_set, use_gt, 200, 512)
                 train_losses_list.append(train_losses)
                 val_losses_list.append(val_losses)
                 train_acc_list.append(train_acc)

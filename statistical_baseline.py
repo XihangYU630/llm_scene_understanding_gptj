@@ -143,7 +143,7 @@ class BaselineRunner:
 
 
 if __name__ == "__main__":
-    for label_set in ["nyuClass"]:
+    for label_set in ["mpcat40", "nyuClass"]:
         for use_test in [True, False]:
             print(label_set, "use test:", use_test)
             bl_runner = BaselineRunner(label_set=label_set, use_test=use_test)
