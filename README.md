@@ -41,3 +41,5 @@ After cloning this repo:
 - `python <ff/contrastive>_holdout_tests.py` runs training on a dataset with certain objects withheld, then evaluating on datapoints with those previously-unseen objects.
 - `python <ff/contrastive>_label_space_test.py` runs training on the mpcat40 label space dataset, then evaluates on the larger nyuClass label space dataset.
 - Some other utility functions and scripts are included as well, such as `compute_cooccurrencies.py`, which generates co-occurrency matrices (i.e. counting frequencies of room-object pairs)
+
+#Notice: BERT-finetuning code is in branch `BERT-Classifier`, which has a separate README file on how to generate data and fine-tune the whole BERT-based classifier.
