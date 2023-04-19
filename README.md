@@ -43,4 +43,4 @@ After cloning this repo:
 - Some other utility functions and scripts are included as well, such as `compute_cooccurrencies.py`, which generates co-occurrency matrices (i.e. counting frequencies of room-object pairs)
 
 # Notice 
-BERT-finetuning code is located in branch `BERT-Classifier`, which has a separate README file on how to generate data and fine-tune the whole BERT-based classifier. Environment for `BERT-Classifier` is the same requirements above.
+BERT-finetuning code is located in branch `BERT-Classifier`, which has a separate README file on how to generate data and fine-tune the whole BERT-based classifier. Environment requirements for `BERT-Classifier` is the same as above.
